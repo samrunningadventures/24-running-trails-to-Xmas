@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>24 trails tot kerst · Sam Runninggirl</title>
+  <meta name="description" content="Adventskalender met elke dag tot kerst een nieuwe trailtip op de kaart.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#kaart">Naar de kaart</a>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav-pill" aria-label="Hoofdmenu">
+        <a class="brand" href="#">
+          <span class="brand-name">Sam Runninggirl</span>
+          <span class="brand-sub">Weekendjes weg &amp; mooiste trails</span>
+        </a>
+        <div class="nav-links">
+          <a href="#kaart">Kaart</a>
+          <a href="#deurtjes">Deurtjes</a>
+        </div>
+        <a class="btn btn-primary btn-sm" id="ig-profile" href="#" target="_blank" rel="noopener">Volg op Instagram</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="snow" aria-hidden="true"></div>
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <p class="eyebrow">Adventskalender <span id="year"></span></p>
+          <h1>24 trails<br>tot kerst</h1>
+          <p class="lead">Elke dag tot kerst gaat er een nieuw cadeautje open op de kaart: een trail die ik zelf liep, met parkeertip, afstanden en de reel erbij.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#kaart">Naar de kaart</a>
+            <a class="btn btn-secondary" href="#deurtjes">Bekijk alle deurtjes</a>
+          </div>
+          <div class="counter" id="counter" role="status"></div>
+        </div>
+        <div class="hero-feature" id="hero-feature"></div>
+      </div>
+    </section>
+
+    <section class="section" id="kaart" tabindex="-1">
+      <div class="container">
+        <p class="eyebrow">Adventskaart</p>
+        <h2>Elke dag een nieuw cadeautje op de kaart</h2>
+        <p class="section-lead">Tik op een cadeautje voor alle info over de run. Dagen die nog moeten komen, blijven een verrassing.</p>
+        <div class="map-wrap">
+          <div id="map" aria-label="Kaart met trailtips"></div>
+          <div class="map-empty" id="map-empty" hidden>
+            <div class="map-empty-card">
+              <span class="gift-big" aria-hidden="true"></span>
+              <p class="eyebrow">Nog even geduld</p>
+              <p class="map-empty-title">Op 1 december verschijnt hier het eerste cadeautje.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="deurtjes">
+      <div class="container">
+        <p class="eyebrow">Aftellen</p>
+        <h2>24 deurtjes tot kerst</h2>
+        <p class="section-lead">Geopende deurtjes brengen je naar de trail op de kaart.</p>
+        <ol class="doors" id="doors"></ol>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-card">
+        <div>
+          <p class="eyebrow eyebrow-light">Samantha · Hardloop avonturen</p>
+          <p class="footer-title">Op zoek naar de<br>mooiste trails 🌳</p>
+          <p class="footer-text">Hoi, ik ben Samantha! Atleet en altijd onderweg naar het volgende avontuur.</p>
+          <ul class="footer-list">
+            <li><span aria-hidden="true">🏃‍♀️</span> Race recaps, because I love racing</li>
+            <li><span aria-hidden="true">✨</span> Hardlopen, hiken, reizen en pizza lover</li>
+            <li><span aria-hidden="true">✉️</span> <a href="mailto:Sam.runningadventures@gmail.com">Sam.runningadventures@gmail.com</a></li>
+          </ul>
+        </div>
+        <div class="footer-cta">
+          <div class="footer-buttons">
+            <a class="btn btn-light" id="ig-profile-footer" href="#" target="_blank" rel="noopener">Volg op Instagram</a>
+            <a class="btn btn-outline-light" href="mailto:Sam.runningadventures@gmail.com">Mail mij</a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-meta">© <span id="footer-year"></span> Sam Runninggirl · Kaartdata © OpenStreetMap-bijdragers, © CARTO</p>
+    </div>
+  </footer>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <aside class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" hidden>
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <button class="sheet-close" id="sheet-close" type="button" aria-label="Sluiten">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="sheet-scroll" id="sheet-content"></div>
+  </aside>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="trails.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
