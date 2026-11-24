@@ -358,3 +358,15 @@ img, svg { display: block; }
   .nav-pill { padding-left: 16px; }
   .brand-sub { display: none; }
 }
+
+/* Footer: Instagram-info */
+.footer-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; font-size: 14px; color: rgba(251, 247, 241, 0.88); }
+.footer-list li { display: flex; gap: 10px; align-items: baseline; }
+.footer-list span { width: 20px; flex: none; text-align: center; }
+.footer-list a { color: var(--card); text-decoration: underline; text-decoration-color: rgba(201, 168, 106, 0.6); text-underline-offset: 3px; word-break: break-all; }
+.footer-list a:hover { text-decoration-color: var(--sand); }
+.footer-stat { margin: 0 0 6px; font-size: 14px; }
+.footer-stat strong { display: block; font: 800 40px/1 var(--serif); color: var(--sand); margin-bottom: 4px; }
+.footer-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn-outline-light { background: transparent; color: var(--card); border-color: rgba(251, 247, 241, 0.35); }
+.btn-outline-light:hover { background: rgba(251, 247, 241, 0.08); }

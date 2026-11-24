@@ -371,6 +371,18 @@ img, svg { display: block; }
   .brand-sub { display: none; }
 }
 
+/* Footer: Instagram-info */
+.footer-list { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 8px; font-size: 14px; color: rgba(251, 247, 241, 0.88); }
+.footer-list li { display: flex; gap: 10px; align-items: baseline; }
+.footer-list span { width: 20px; flex: none; text-align: center; }
+.footer-list a { color: var(--card); text-decoration: underline; text-decoration-color: rgba(201, 168, 106, 0.6); text-underline-offset: 3px; word-break: break-all; }
+.footer-list a:hover { text-decoration-color: var(--sand); }
+.footer-stat { margin: 0 0 6px; font-size: 14px; }
+.footer-stat strong { display: block; font: 800 40px/1 var(--serif); color: var(--sand); margin-bottom: 4px; }
+.footer-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn-outline-light { background: transparent; color: var(--card); border-color: rgba(251, 247, 241, 0.35); }
+.btn-outline-light:hover { background: rgba(251, 247, 241, 0.08); }
+
 </style>
 </head>
 <body>
@@ -442,13 +454,23 @@ img, svg { display: block; }
     <div class="container">
       <div class="footer-card">
         <div>
-          <p class="eyebrow eyebrow-light">Sam Runninggirl</p>
+          <p class="eyebrow eyebrow-light">Samantha · Hardloop avonturen</p>
           <p class="footer-title">Weekendjes weg &amp;<br>mooiste trails</p>
-          <p class="footer-text">Een rustige, persoonlijke reis- en trailsite met gidsen voor de mooiste paden dichtbij en net over de grens.</p>
+          <p class="footer-text">Hoi, ik ben Samantha! Atleet en altijd onderweg naar het volgende avontuur.</p>
+          <ul class="footer-list">
+            <li><span aria-hidden="true">🌳</span> Op zoek naar de mooiste trails</li>
+            <li><span aria-hidden="true">🏃‍♀️</span> Race recaps, because I love racing</li>
+            <li><span aria-hidden="true">✨</span> Hardlopen, hiken, reizen en pizza lover</li>
+            <li><span aria-hidden="true">✉️</span> <a href="mailto:Sam.runningadventures@gmail.com">Sam.runningadventures@gmail.com</a></li>
+          </ul>
         </div>
         <div class="footer-cta">
-          <p class="footer-text">Elke dag een nieuwe tip? Volg mee op Instagram.</p>
-          <a class="btn btn-light" id="ig-profile-footer" href="#" target="_blank" rel="noopener">Volg op Instagram</a>
+          <p class="footer-stat"><strong>9.000+</strong> hardlopers volgen mee</p>
+          <p class="footer-text">Elke dag een nieuwe trailtip? Volg mee op Instagram.</p>
+          <div class="footer-buttons">
+            <a class="btn btn-light" id="ig-profile-footer" href="#" target="_blank" rel="noopener">Volg op Instagram</a>
+            <a class="btn btn-outline-light" href="mailto:Sam.runningadventures@gmail.com">Mail mij</a>
+          </div>
         </div>
       </div>
       <p class="footer-meta">© <span id="footer-year"></span> Sam Runninggirl · Kaartdata © OpenStreetMap-bijdragers, © CARTO</p>
