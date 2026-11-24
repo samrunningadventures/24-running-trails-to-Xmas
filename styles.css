@@ -177,7 +177,17 @@ img, svg { display: block; }
 .map-wrap { position: relative; border-radius: 26px; overflow: hidden; box-shadow: var(--shadow); background: #EFE8DD; }
 #map { height: 460px; width: 100%; background: #EFE8DD; z-index: 0; }
 @media (min-width: 880px) { #map { height: 580px; } }
-#map .leaflet-tile-pane { filter: sepia(0.28) saturate(0.85) hue-rotate(-8deg) brightness(1.02); }
+/* OSM-tegels zijn fel van kleur: flink ontkleuren en warm maken zodat de cadeautjes opvallen. */
+#map .leaflet-tile-pane { filter: grayscale(0.45) sepia(0.25) saturate(0.9) contrast(0.97); }
+
+.map-hint {
+  position: absolute; inset: 0; z-index: 600;
+  display: grid; place-items: center; padding: 24px; text-align: center;
+  background: rgba(35, 57, 46, 0.55); color: var(--card);
+  font: 600 16px/1.4 var(--sans);
+  opacity: 0; transition: opacity .25s ease; pointer-events: none;
+}
+.map-hint.is-visible { opacity: 1; }
 .leaflet-container { font-family: var(--sans); }
 .leaflet-control-zoom { border: 0 !important; box-shadow: var(--shadow-sm) !important; border-radius: 14px !important; overflow: hidden; }
 .leaflet-control-zoom a { background: var(--card) !important; color: var(--ink) !important; border-bottom-color: var(--line) !important; }

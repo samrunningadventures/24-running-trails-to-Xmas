@@ -20,11 +20,21 @@
     return { y: +o.year, m: +o.month, d: +o.day };
   }
 
+  function isReady(t) {
+    return !!(t && t.title && Array.isArray(t.coords) && t.coords.length === 2);
+  }
+
   var today = nlToday();
+  var loadedDate = today;
   var previewDay = null;
   var previewParam = new URLSearchParams(location.search).get("preview");
-  if (previewParam !== null && /^\d+$/.test(previewParam)) {
-    previewDay = Math.max(0, Math.min(25, +previewParam));
+  if (previewParam !== null) {
+    if (/^\d+$/.test(previewParam)) previewDay = Math.max(0, Math.min(25, +previewParam));
+    // Preview van een dag die nog niet (compleet) in trails.js staat: terug naar de gewone pagina.
+    if (previewDay === null || (previewDay > 0 && !isReady(byDay[Math.min(previewDay, 24)]))) {
+      location.replace(location.pathname + location.hash);
+      return;
+    }
     today = previewDay === 0 ? { y: YEAR, m: 11, d: 30 } : { y: YEAR, m: 12, d: previewDay };
   }
 
@@ -40,9 +50,6 @@
     return Math.round((Date.UTC(b.y, b.m - 1, b.d) - Date.UTC(a.y, a.m - 1, a.d)) / 86400000);
   }
 
-  function isReady(t) {
-    return !!(t && t.title && Array.isArray(t.coords) && t.coords.length === 2);
-  }
   var openDays = TRAILS.filter(function (t) { return t.day <= openCount && isReady(t); })
     .map(function (t) { return t.day; });
 
@@ -112,7 +119,7 @@
       stars();
     s.layers.forEach(function (l, i) {
       out += '<path d="' + l[1] + '" fill="' + l[0] + '"/>';
-      if (i === 1 && s.trees) out += trees(s.trees === "sparse" ? 3 : 7);
+      if (i === 1 && s.trees) out += trees(s.trees === "sparse");
       if (i === 1 && s.grass) out += grass();
     });
     if (s.water) out += '<path d="' + s.water + '" fill="#A9BFC2" opacity=".9"/>';
@@ -129,9 +136,8 @@
     }).join("");
   }
 
-  function trees(n) {
-    var xs = [36, 70, 98, 300, 330, 360, 384].slice(0, n === 3 ? 0 : 7);
-    if (n === 3) xs = [64, 318, 350];
+  function trees(sparse) {
+    var xs = sparse ? [64, 318, 350] : [36, 70, 98, 300, 330, 360, 384];
     return xs.map(function (x, i) {
       var h = 26 + (i % 3) * 8;
       var base = 166 - (i % 2) * 4;
@@ -235,20 +241,45 @@
   }
 
   /* ---------- Kaart ---------- */
+  // Op touchscreens: één vinger scrollt de pagina, twee vingers verplaatsen/zoomen de kaart.
+  // Zonder `dragging` krijgt de kaart van Leaflet `touch-action: pan-x pan-y`, waardoor de
+  // browser het scrollen met één vinger afhandelt en Leaflets pinch-zoom het met twee doet.
+  var coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+
   var map = L.map("map", {
     scrollWheelZoom: false,
+    dragging: !coarsePointer,
     zoomSnap: 0.5,
     attributionControl: true
   }).fitBounds([[50.75, 3.4], [53.5, 7.2]]);
 
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-    maxZoom: 18,
-    subdomains: "abcd",
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-bijdragers'
   }).addTo(map);
 
   map.on("click", function () { map.scrollWheelZoom.enable(); });
   map.getContainer().addEventListener("mouseleave", function () { map.scrollWheelZoom.disable(); });
+
+  if (coarsePointer) {
+    var hint = $("map-hint");
+    var hintTimer = null;
+    var touchStart = null;
+    var mapEl = map.getContainer();
+    mapEl.addEventListener("touchstart", function (e) {
+      touchStart = e.touches.length === 1 ? [e.touches[0].clientX, e.touches[0].clientY] : null;
+      if (e.touches.length > 1) hint.classList.remove("is-visible");
+    }, { passive: true });
+    mapEl.addEventListener("touchmove", function (e) {
+      if (!touchStart || e.touches.length !== 1) return;
+      var dx = e.touches[0].clientX - touchStart[0], dy = e.touches[0].clientY - touchStart[1];
+      if (dx * dx + dy * dy < 144) return;
+      touchStart = null;
+      hint.classList.add("is-visible");
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(function () { hint.classList.remove("is-visible"); }, 1600);
+    }, { passive: true });
+  }
 
   var markers = {};
   openDays.forEach(function (day) {
@@ -355,6 +386,40 @@
       '<span><span class="fact-label">' + label + '</span><span class="fact-value">' + esc(value) + "</span></span></li>";
   }
 
+  var SHARE = '<svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 8l4-4 4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 12v7a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var PAGE_TITLE = document.title;
+  var DAY_HASH = /^#dag-(\d{1,2})$/;
+
+  function shareUrl(day) {
+    return location.origin + location.pathname + "#dag-" + day;
+  }
+
+  // Zet #dag-N in de adresbalk zonder extra stap in de geschiedenis.
+  function setDayHash(day) {
+    if (!day && !DAY_HASH.test(location.hash)) return;
+    history.replaceState(null, "", location.pathname + location.search + (day ? "#dag-" + day : ""));
+    document.title = day ? "Dag " + day + ": " + byDay[day].title + " · " + PAGE_TITLE : PAGE_TITLE;
+  }
+
+  function shareDay(day, btn) {
+    var t = byDay[day];
+    var url = shareUrl(day);
+    var label = btn.querySelector(".share-label");
+    function feedback(text) {
+      label.textContent = text;
+      setTimeout(function () { label.textContent = "Deel deze trail"; }, 2200);
+    }
+    if (navigator.share) {
+      navigator.share({ title: "Dag " + day + ": " + t.title, text: "Trail tip " + day + " van 24 trails tot kerst", url: url })
+        .catch(function () {});
+    } else if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(function () { feedback("Link gekopieerd ✓"); },
+        function () { window.prompt("Kopieer de link:", url); });
+    } else {
+      window.prompt("Kopieer de link:", url);
+    }
+  }
+
   var IG = '<svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>';
 
   function renderSheet(day) {
@@ -389,6 +454,7 @@
         ? '<a class="btn btn-primary" href="' + esc(t.instagramUrl) + '" target="_blank" rel="noopener">' + IG + "Bekijk de reel op Instagram</a>"
         : '<span class="btn btn-primary" aria-disabled="true">' + IG + "Reel volgt binnenkort</span>") +
       '<a class="btn btn-secondary" href="' + esc(routeUrl(t)) + '" target="_blank" rel="noopener">Route naar ' + (has(t.parking) ? "parkeerplaats" : "startpunt") + "</a>" +
+      '<button class="btn btn-secondary" type="button" id="share-btn">' + SHARE + '<span class="share-label" aria-live="polite">Deel deze trail</span></button>' +
       "</div>" +
       '<div class="sheet-nav">' +
       '<button class="nav-btn" type="button" data-go="' + (prev || "") + '"' + (prev ? "" : " disabled") + ">← " + (prev ? "Dag " + prev : "Vorige") + "</button>" +
@@ -396,6 +462,8 @@
       "</div></div>";
     content.innerHTML = html;
     content.scrollTop = 0;
+    setDayHash(day);
+    $("share-btn").addEventListener("click", function (e) { shareDay(day, e.currentTarget); });
     content.querySelectorAll("[data-go]").forEach(function (b) {
       b.addEventListener("click", function () {
         var d = +b.dataset.go;
@@ -427,6 +495,7 @@
     backdrop.hidden = true;
     document.body.classList.remove("sheet-open");
     currentDay = null;
+    setDayHash(null);
     if (lastTrigger && document.contains(lastTrigger)) lastTrigger.focus();
   }
 
@@ -450,6 +519,26 @@
   renderDoors();
   renderSnow();
 
-  var hashDay = /^#dag-(\d{1,2})$/.exec(location.hash);
-  if (hashDay && openDays.indexOf(+hashDay[1]) !== -1) focusTrail(+hashDay[1]);
+  function openFromHash() {
+    var m = DAY_HASH.exec(location.hash);
+    var day = m ? +m[1] : null;
+    if (day && openDays.indexOf(day) !== -1) {
+      if (day !== currentDay) focusTrail(day);
+    } else if (!sheet.hidden) {
+      closeSheet();
+    }
+  }
+  openFromHash();
+  window.addEventListener("hashchange", openFromHash);
+
+  // Pagina blijft open over middernacht: herladen zodat het nieuwe deurtje opengaat.
+  if (previewDay === null) {
+    var checkNewDay = function () {
+      var now = nlToday();
+      var changed = now.y !== loadedDate.y || now.m !== loadedDate.m || now.d !== loadedDate.d;
+      if (changed && sheet.hidden && document.visibilityState === "visible") location.reload();
+    };
+    setInterval(checkNewDay, 60000);
+    document.addEventListener("visibilitychange", checkNewDay);
+  }
 })();

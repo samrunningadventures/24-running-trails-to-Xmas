@@ -5,10 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>24 trails tot kerst · Sam Runninggirl</title>
   <meta name="description" content="Adventskalender met elke dag tot kerst een nieuwe trailtip op de kaart.">
+  <meta name="theme-color" content="#23392E">
+
+  <!-- Linkvoorbeeld (WhatsApp, Instagram, Facebook...). Bij een nieuwe URL: de drie adressen hieronder aanpassen. -->
+  <link rel="canonical" href="https://samrunningadventures.github.io/24-running-trails-to-Xmas/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:site_name" content="Sam Runninggirl">
+  <meta property="og:title" content="24 trails tot kerst">
+  <meta property="og:description" content="Elke dag tot kerst een nieuw cadeautje op de kaart: een mooie trail met parkeertip, afstanden en de reel erbij.">
+  <meta property="og:url" content="https://samrunningadventures.github.io/24-running-trails-to-Xmas/">
+  <meta property="og:image" content="https://samrunningadventures.github.io/24-running-trails-to-Xmas/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="24 trails tot kerst: adventskalender met trailtips van Sam Runninggirl">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -55,6 +74,7 @@
         <p class="section-lead">Tik op een cadeautje voor alle info over de run. Dagen die nog moeten komen, blijven een verrassing.</p>
         <div class="map-wrap">
           <div id="map" aria-label="Kaart met trailtips"></div>
+          <div class="map-hint" id="map-hint" aria-hidden="true">Gebruik twee vingers om de kaart te verplaatsen</div>
           <div class="map-empty" id="map-empty" hidden>
             <div class="map-empty-card">
               <span class="gift-big" aria-hidden="true"></span>
@@ -96,7 +116,7 @@
           </div>
         </div>
       </div>
-      <p class="footer-meta">© <span id="footer-year"></span> Sam Runninggirl · Kaartdata © OpenStreetMap-bijdragers, © CARTO</p>
+      <p class="footer-meta">© <span id="footer-year"></span> Sam Runninggirl · Kaartdata © OpenStreetMap-bijdragers</p>
     </div>
   </footer>
 
@@ -109,7 +129,7 @@
     <div class="sheet-scroll" id="sheet-content"></div>
   </aside>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="trails.js"></script>
   <script src="app.js"></script>
 </body>

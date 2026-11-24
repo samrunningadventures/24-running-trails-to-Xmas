@@ -14,7 +14,6 @@
 window.TRAILS_CONFIG = {
   year: 2026,
   timeZone: "Europe/Amsterdam",
-  // CONTROLEREN: link naar je eigen Instagram-profiel
   instagramProfileUrl: "https://www.instagram.com/sam.runninggirl/",
 };
 
@@ -23,7 +22,7 @@ window.TRAILS = [
     day: 1,
     title: "Paleispark Het Loo",
     location: "Apeldoorn, Paleispark (Kroondomein) Het Loo",
-    coords: [52.2339, 5.9453], // CONTROLEREN: startpunt
+    coords: [52.2339, 5.9453],
     parking: "Bosloo (gratis parkeren)",
     parkingQuery: "Parkeerplaats Bosloo, Apeldoorn",
     parkingCoords: null, // optioneel, bijv. [52.24, 5.93]
@@ -40,7 +39,7 @@ window.TRAILS = [
     day: 2,
     title: "Loonse en Drunense Duinen",
     location: "Noord-Brabant, Nationaal Park Loonse en Drunense Duinen",
-    coords: [51.6440, 5.0960], // CONTROLEREN
+    coords: [51.6440, 5.0960],
     parking: "",
     distance: "",
     routes: "",
@@ -54,7 +53,7 @@ window.TRAILS = [
     day: 3,
     title: "Nationaal Park De Maasduinen",
     location: "Noord-Limburg, Nationaal Park De Maasduinen",
-    coords: [51.5600, 6.1000], // CONTROLEREN
+    coords: [51.5600, 6.1000],
     parking: "",
     distance: "",
     routes: "",

@@ -12,7 +12,7 @@ en moet dezelfde uitstraling hebben.
 ## Techniek
 - Statische pagina (HTML/CSS/JS) zonder build-stap, zodat ik hem op mijn site kan
   zetten, embedden of via GitHub Pages kan hosten.
-- Kaart met Leaflet.js en een rustige, lichte kaartlaag (CARTO Positron), iets warmer
+- Kaart met Leaflet.js en een rustige, lichte kaartlaag (OpenStreetMap-tegels, ontkleurd), iets warmer
   gekleurd zodat de kleuren van de site naar voren komen.
 - Alle routes staan in een apart bestand `trails.js`, zodat ik dag 4 t/m 24 kan
   toevoegen zonder de rest van de code aan te raken. Daarin staat ook een klein
