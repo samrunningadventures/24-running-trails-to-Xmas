@@ -32,7 +32,7 @@ window.TRAILS = [
     landscape: "forest", // forest | dunes | heath | river
     intro: "Perfect voor hardlopen of wandelen 🙏",
     description: "",
-    hashtags: ["hardlopen", "running", "dutchrunner", "trailrun", "paleisparkhetloo"],
+    hashtags: ["hardlopen", "running", "test", "trailrun", "paleisparkhetloo"],
     instagramUrl: "https://www.instagram.com/reel/DUfuLEJiObz/",
   },
   {
