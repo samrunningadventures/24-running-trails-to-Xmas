@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#F1E2D3"/>
+  <path d="M0 430 C 180 360 360 354 540 414 S 900 330 1200 384 V750 H0Z" fill="#9AAA8A"/>
+  <path d="M0 516 C 210 450 420 456 630 504 S 990 450 1200 480 V750 H0Z" fill="#6F8466"/>
+  <path d="M0 600 C 240 546 510 558 720 594 S 1050 552 1200 576 V750 H0Z" fill="#23392E"/>
+  <g transform="translate(600 250)" fill="none" stroke="#23392E" stroke-width="6" stroke-linejoin="round" opacity=".55">
+    <rect x="-70" y="-46" width="140" height="96" rx="16"/>
+    <path d="M-30 -46 l10 -18 h40 l10 18"/>
+    <circle cx="0" cy="2" r="28"/>
+  </g>
+  <text x="600" y="372" text-anchor="middle" font-family="Georgia, serif" font-size="44" font-weight="700" fill="#23392E" opacity=".7">Foto 1 volgt</text>
+</svg>

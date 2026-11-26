@@ -330,6 +330,42 @@ img, svg { display: block; }
 
 .sheet-art { aspect-ratio: 16 / 10; }
 .sheet-art svg { width: 100%; height: 100%; }
+
+/* Foto's in het detailpaneel: één foto of een swipebare serie */
+.gallery { position: relative; background: #EFE8DD; }
+.gallery-track {
+  display: flex; height: 100%;
+  overflow-x: auto; scroll-snap-type: x mandatory; overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.gallery-track::-webkit-scrollbar { display: none; }
+.gallery-slide { flex: 0 0 100%; height: 100%; margin: 0; position: relative; scroll-snap-align: start; }
+.gallery-slide img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-slide figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 28px 16px 30px; font-size: 13px; color: var(--card);
+  background: linear-gradient(180deg, transparent, rgba(35, 57, 46, 0.6));
+}
+.gallery-btn {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 36px; height: 36px; border-radius: 50%; border: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(251, 247, 241, 0.9); color: var(--ink); box-shadow: var(--shadow-sm);
+  transition: opacity .15s ease;
+}
+.gallery-prev { left: 12px; }
+.gallery-next { right: 12px; }
+.gallery-btn:disabled { opacity: 0; pointer-events: none; }
+.gallery-dots {
+  position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%);
+  display: flex; gap: 2px; padding: 0 4px; border-radius: 999px;
+  background: rgba(35, 57, 46, 0.35);
+}
+.gallery-dot { width: 20px; height: 20px; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.gallery-dot::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: rgba(251, 247, 241, 0.55); transition: background .15s ease, transform .15s ease; }
+.gallery-dot[aria-current="true"]::before { background: var(--card); transform: scale(1.2); }
+/* Op touchscreens swipe je; de pijltjes zijn dan overbodig. */
+@media (pointer: coarse) { .gallery-btn { display: none; } }
 .sheet-body { padding: 22px 22px 28px; }
 .sheet-body h2 { font-size: 30px; line-height: 1.1; font-weight: 800; }
 .sheet-intro { margin: 10px 0 0; color: var(--muted); font-size: 15px; }

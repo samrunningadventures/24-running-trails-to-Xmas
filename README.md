@@ -12,6 +12,7 @@ met alle info over de trail en een link naar de Instagram-reel.
 | `styles.css` | Stijl (kleuren, lettertypes, kaartjes) |
 | `app.js` | Logica (kaart, ontgrendelen, detailpaneel) |
 | `favicon.svg`, `favicon-32.png`, `apple-touch-icon.png` | Icoontjes voor het browsertabblad en het beginscherm |
+| `images/` | Foto's per dag (nu nog met voorbeeldplaatjes `placeholder-1.svg` t/m `3`) |
 | `og-image.png` | Voorbeeldplaatje als de link gedeeld wordt (WhatsApp, Instagram...) |
 | `.nojekyll` | Zorgt dat GitHub Pages de bestanden serveert zoals ze zijn (zonder Jekyll) |
 | `PROMPT.md` | De prompt waarmee dit is gebouwd |
@@ -25,6 +26,27 @@ met alle info over de trail en een link naar de Instagram-reel.
    - **Landschap:** `forest`, `dunes`, `heath` of `river` (bepaalt de illustratie).
    - Velden die je leeg laat, worden niet getoond.
 4. Zonder `title` of `coords` verschijnt een geopende dag als "Binnenkort" en niet op de kaart.
+
+## Foto's toevoegen
+1. Zet de foto's in de map `images`, bijvoorbeeld `images/dag-4-1.jpg`, `images/dag-4-2.jpg`.
+   Geen spaties of hoofdletters in de bestandsnaam: GitHub Pages let op hoofdletters.
+2. Zet ze bij de dag in `trails.js`:
+   ```js
+   images: ["images/dag-4-1.jpg", "images/dag-4-2.jpg"],
+   ```
+   Eén foto wordt één foto, meer foto's worden een slideshow (swipen op mobiel, pijltjes op desktop).
+   Zonder `images` blijft de illustratie staan. Klopt een pad niet, dan zie je ook de illustratie.
+3. Wil je een onderschrift of een betere uitsnede? Gebruik dan een object:
+   ```js
+   images: [{ src: "images/dag-4-1.jpg", alt: "Zandpad door de duinen", caption: "Start bij de parkeerplaats", position: "center 30%" }],
+   ```
+   `position` bepaalt welk deel zichtbaar blijft. De foto wordt liggend (16:10) getoond, dus bij
+   staande foto's valt boven en onder iets weg.
+
+Tip: maak foto's ongeveer 1200 px breed en sla ze op als JPG (liefst onder 300 KB), dan laadt het paneel snel.
+
+Let op: dag 1 en 2 gebruiken nu de voorbeeldplaatjes. Vervang ze vóór 1 december door echte foto's
+(of haal de `images`-regels weg), anders zien bezoekers "Foto volgt".
 
 ## Testen
 Open de pagina met `?preview=N` om te doen alsof het N december is:

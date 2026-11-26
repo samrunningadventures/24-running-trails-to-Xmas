@@ -422,12 +422,97 @@
 
   var IG = '<svg class="ig-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="17.3" cy="6.7" r="1.2" fill="currentColor"/></svg>';
 
+  /* ---------- Foto's ---------- */
+  // `images` in trails.js: lijst met paden ("images/dag-1-1.jpg") of objecten
+  // { src, alt, caption, position }. Zonder foto's tonen we de illustratie.
+  function photos(t) {
+    return (Array.isArray(t.images) ? t.images : []).map(function (img) {
+      return typeof img === "string" ? { src: img } : img || {};
+    }).filter(function (img) { return has(img.src); });
+  }
+
+  function gallery(t) {
+    var imgs = photos(t);
+    if (!imgs.length) return '<div class="sheet-art">' + scene(t.landscape) + "</div>";
+    var multi = imgs.length > 1;
+    var html = '<div class="sheet-art gallery"' + (multi ? ' role="region" aria-roledescription="fotoserie" aria-label="Foto\'s van ' + esc(t.title) + '"' : "") + ">" +
+      '<div class="gallery-track">';
+    imgs.forEach(function (img, i) {
+      html += '<figure class="gallery-slide"' + (multi ? ' role="group" aria-roledescription="foto" aria-label="' + (i + 1) + " van " + imgs.length + '"' : "") + ">" +
+        '<img src="' + esc(img.src) + '" alt="' + esc(img.alt || t.title) + '"' +
+        (has(img.position) ? ' style="object-position:' + esc(img.position) + '"' : "") +
+        (i === 0 ? "" : ' loading="lazy"') + ' decoding="async">' +
+        (has(img.caption) ? "<figcaption>" + esc(img.caption) + "</figcaption>" : "") +
+        "</figure>";
+    });
+    html += "</div>";
+    if (multi) {
+      html += '<button class="gallery-btn gallery-prev" type="button" aria-label="Vorige foto">' +
+        '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<button class="gallery-btn gallery-next" type="button" aria-label="Volgende foto">' +
+        '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<div class="gallery-dots">' + imgs.map(function (_, i) {
+          return '<button type="button" class="gallery-dot" aria-label="Foto ' + (i + 1) + '"' + (i === 0 ? ' aria-current="true"' : "") + "></button>";
+        }).join("") + "</div>";
+    }
+    return html + "</div>";
+  }
+
+  function initGallery(el, t) {
+    if (!el) return;
+    var track = el.querySelector(".gallery-track");
+    // Ontbrekend bestand (typfout in het pad): toon de illustratie in plaats van een leeg vlak.
+    el.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("error", function () {
+        var slide = img.parentNode;
+        slide.classList.add("is-fallback");
+        slide.innerHTML = scene(t.landscape);
+      });
+    });
+
+    var dots = el.querySelectorAll(".gallery-dot");
+    if (!dots.length) return;
+    var prev = el.querySelector(".gallery-prev");
+    var next = el.querySelector(".gallery-next");
+    var count = dots.length;
+
+    // Bij het renderen is het paneel soms nog verborgen (breedte 0).
+    function current() { return track.clientWidth ? Math.round(track.scrollLeft / track.clientWidth) : 0; }
+    function go(i) {
+      i = Math.max(0, Math.min(count - 1, i));
+      track.scrollTo({ left: i * track.clientWidth, behavior: reduceMotion ? "auto" : "smooth" });
+    }
+    function update() {
+      var i = current();
+      dots.forEach(function (d, j) {
+        if (j === i) d.setAttribute("aria-current", "true"); else d.removeAttribute("aria-current");
+      });
+      prev.disabled = i === 0;
+      next.disabled = i === count - 1;
+    }
+
+    var ticking = false;
+    track.addEventListener("scroll", function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    prev.addEventListener("click", function () { go(current() - 1); });
+    next.addEventListener("click", function () { go(current() + 1); });
+    dots.forEach(function (d, j) { d.addEventListener("click", function () { go(j); }); });
+    el.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(current() - 1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(current() + 1); }
+    });
+    update();
+  }
+
   function renderSheet(day) {
     var t = byDay[day];
     var idx = openDays.indexOf(day);
     var prev = openDays[idx - 1];
     var next = openDays[idx + 1];
-    var html = '<div class="sheet-art">' + scene(t.landscape) + "</div>" +
+    var html = gallery(t) +
       '<div class="sheet-body">' +
       '<p class="eyebrow">Dag ' + t.day + " · Trail tip" + (t.day === todayDay ? " · Nieuw vandaag" : "") + "</p>" +
       '<h2 id="sheet-title">' + esc(t.title) + "</h2>" +
@@ -464,6 +549,7 @@
     content.scrollTop = 0;
     setDayHash(day);
     $("share-btn").addEventListener("click", function (e) { shareDay(day, e.currentTarget); });
+    initGallery(content.querySelector(".gallery"), t);
     content.querySelectorAll("[data-go]").forEach(function (b) {
       b.addEventListener("click", function () {
         var d = +b.dataset.go;
